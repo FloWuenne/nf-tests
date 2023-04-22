@@ -1,14 +1,21 @@
 nextflow.enable.dsl=2
 
-process OOM {
-    memory '400 MB'
+process UNTAR {
+    cpus 12
+    memory 72.GB
+    time 16.h
+
+    container "nfcore/bcl2fastq:2.20.0.422"
+
+    input:
+    path tar_file
 
     script:
-    '''
-    A=$(cat /dev/random | base64 -w 0 | head -c 1000000000000000)
-    '''
+    """
+    tar -xzvf $tar_file
+    """
 }
 
 workflow {
-    OOM()
+    UNTAR ( params.input )
 }
