@@ -1,6 +1,6 @@
 nextflow.enable.dsl=2
 
-process UNTAR {
+process MOVE {
     cpus 12
     memory 72.GB
     time 16.h
@@ -11,11 +11,13 @@ process UNTAR {
     path tar_file
 
     script:
+    untar_dir = tar_file.toString() - '.tar.gz'
     """
     tar -xzvf $tar_file
+    mv $untar_dir output
     """
 }
 
 workflow {
-    UNTAR ( params.input )
+    MOVE ( params.input )
 }
