@@ -1,11 +1,13 @@
 nextflow.enable.dsl=2
 
 process OOM {
-    memory '400 MB'
+    memory '500 MB'
 
     script:
     '''
-    A=$(cat /dev/random | base64 -w 0 | head -c 1000000000000000)
+    #!/usr/bin/env python
+
+    a = "asdfsadf".join(map(str, range(1, 1000000000)))
     '''
 }
 
