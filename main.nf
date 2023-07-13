@@ -1,4 +1,14 @@
+nextflow.enable.dsl=2
+
+process TMP {
+    container "jordeu/ubuntu:nonroot"
+
+    script:
+    '''
+    echo "hola" > $TMPDIR
+    '''
+}
+
 workflow {
-    log.info "Just a test repository."
-    log.info "Nothing interesting here."
+    TMP()
 }
