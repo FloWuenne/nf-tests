@@ -1,4 +1,14 @@
+nextflow.enable.dsl=2
+
+process CURL {
+    debug true
+
+    script:
+    """
+    curl https://wave.seqera.io/service-info
+    """
+}
+
 workflow {
-    log.info "Just a test repository."
-    log.info "Nothing interesting here."
+    CURL()
 }
