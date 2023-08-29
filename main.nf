@@ -13,6 +13,7 @@ process CHECK_AND_UNZIP {
 
     script:
     """
+    # Function to store execution time
     tm() { { >&2 echo -n -e "\$1\t" ; TIMEFORMAT="%E"; time bash -c "\$2" ; } 2>> stats.txt ; }
 
     # Verify the file MD5 checksum
@@ -34,6 +35,7 @@ process ZIP_AND_COMPARE {
 
     script:
     '''
+    # Function to store execution time
     tm() { { >&2 echo -n -e "$1\t" ; TIMEFORMAT="%E"; time bash -c "$2" ; } 2>> stats.txt ; }
 
     # Compress file
