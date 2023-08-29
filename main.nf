@@ -42,7 +42,7 @@ process ZIP_AND_COMPARE {
     tm() { { >&2 echo -n -e "$1\t" ; TIMEFORMAT="%E"; time bash -c "$2" ; } 2>> stats.txt ; }
 
     # Compress file
-    tm compress "gzip -c file.fastq > file.fastq.gz"
+    tm compress "gzip --fast -c file.fastq > file.fastq.gz"
 
     # Compare with the original compressed file
     tm compare "zcmp file.fastq.gz original.fastq.gz"
