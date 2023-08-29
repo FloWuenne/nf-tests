@@ -21,6 +21,9 @@ process CHECK_AND_UNZIP {
 
     # Uncompress the file
     tm uncompress "gzip -d -c file.fastq.gz > file.fastq"
+
+    # Count reads
+    tm count "grep -c '^+\$' file.fastq" 
     """
 }
 
