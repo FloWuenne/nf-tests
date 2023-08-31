@@ -13,8 +13,8 @@ process CHECK_AND_UNZIP {
 
     script:
     """
-    # Function to store execution time
-    tm() { { >&2 echo -n -e "\$1\t" ; TIMEFORMAT="%E"; time bash -c "\$2" ; } 2>> stats.txt ; }
+    # Function to store execution time and free page cache
+    tm() { { >&2 echo -n -e "\$1\t" ; TIMEFORMAT="%E"; time bash -c "\$2" ; } 2>> stats.txt ; echo 1 > /proc/sys/vm/drop_caches ; }
 
     # Read as fast as possible
     tm read "cat file.fastq.gz > /dev/null"
