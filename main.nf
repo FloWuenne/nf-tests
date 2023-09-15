@@ -54,14 +54,18 @@ process ZIP_AND_COMPARE {
 
 process REPORT {
     debug true
+    publishDir "${params.outdir}"
 
     input:
       path "check_and_unzip.txt"
       path "zip_and_compare.txt"
 
+    output:
+      path "stats.txt"
+
     script:
     '''
-    cat *.txt
+    cat *.txt | tee stats.txt
     '''
 }
  
