@@ -13,11 +13,14 @@ process CHECK_AND_UNZIP {
 
     script:
     """
-    # Function to store execution time and free page cache
+    # Function to store execution time
     tm() { { >&2 echo -n -e "\$1\t" ; TIMEFORMAT="%E"; time bash -c "\$2" ; } 2>> stats.txt ; }
 
     # Read as fast as possible
-    tm read "cat file.fastq.gz > /dev/null"
+    tm read "dd if=file.fastq.gz of=/dev/null iflag=direct bs=1M"
+
+    # Read again as fast as possible
+    tm read2 "dd if=file.fastq.gz of=/dev/null iflag=direct bs=1M"
 
     # Verify the file MD5 checksum
     tm check "echo ${checksum} file.fastq.gz | md5sum --check --status"
