@@ -1,12 +1,14 @@
 nextflow.enable.dsl=2
 
-process TMP {
+process DF {
+    debug true
+
     script:
     '''
-    mktemp
+    df -h
     '''
 }
 
 workflow {
-    TMP()
+    DF()
 }
