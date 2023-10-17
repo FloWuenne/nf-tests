@@ -35,8 +35,8 @@ workflow {
   input2 = file('https://raw.githubusercontent.com/jordeu/nf-tests/checksum/hello.txt', checksum: 'sha1::a0b65939670bc2c010f4d5d6a0b3e4e4590fb92b')
   input3 = file('https://raw.githubusercontent.com/jordeu/nf-tests/checksum/hello.txt', checksum: 'sha256::03ba204e50d126e4674c005e04d82e84c21366780af1f43bd54a37816b6ab340')
   
-  MD5(input1)
-  SHA1(input2)
-  SHA265(input3)
+  MD5(Channel.of(input1))
+  SHA1(Channel.of(input2))
+  SHA265(Channel.of(input3))
 }
 
