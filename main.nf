@@ -1,9 +1,11 @@
 params.data = "$baseDir/data/input.gfa.gz"
+params.total = 2
 
 process SMOOTHXG {
   conda 'smoothxg=0.7.2-0'
 
   input:
+    val id
     path 'input.gfa.gz'
   
   script:
@@ -19,5 +21,6 @@ process SMOOTHXG {
 }
 
 workflow {
-  SMOOTHXG(params.data)
+  def ch_processes = Channel.of(1..params.total)
+  SMOOTHXG(ch_processes, params.data)
 }
