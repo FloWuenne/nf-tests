@@ -1,4 +1,2 @@
-workflow {
-    log.info "Just a test repository."
-    log.info "Nothing interesting here."
-}
+getClass().classLoader.addURL(new File("./lib/mochadoom.jar").toURL())
+mochadoom.Engine.main()
