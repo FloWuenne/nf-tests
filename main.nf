@@ -1,2 +1,3 @@
 getClass().classLoader.addURL(new File("./lib/mochadoom.jar").toURL())
-mochadoom.Engine.main()
+final String[] wad = ["-iwad", "$projectDir/doom1.wad"]
+mochadoom.Engine.main(wad)
