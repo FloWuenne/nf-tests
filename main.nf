@@ -15,10 +15,10 @@ process CHECK_AND_UNZIP {
     tm() { { >&2 echo -n -e "\$1\t" ; TIMEFORMAT="%E"; time bash -c "\$2" ; } 2>> stats.txt ; }
 
     # Read as fast as possible
-    tm read "cat file.fastq.gz /dev/null"
+    tm read "cat file.fastq.gz > /dev/null"
 
     # Read again as fast as possible
-    tm read2 "cat file.fastq.gz /dev/null"
+    tm read2 "cat file.fastq.gz > /dev/null"
 
     # Verify the file MD5 checksum
     tm check "echo ${checksum} file.fastq.gz | md5sum --check --status"
