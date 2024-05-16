@@ -1,26 +1,27 @@
 process BIGFILE {
 
     output:
-      path "big.file"
+      path "folder"
 
 
     script:
     '''
-    dd if=/dev/zero of=big.file bs=1G count=6
+    mkdir folder
+    dd if=/dev/zero of=folder/big.file bs=1G count=6
     '''
 }
 
 process MOVE {
 
     input:
-      path "in.file"
+      path "folder"
 
     output:
       path "out.file"
 
     script:
     '''
-    mv in.file out.file
+    mv folder/big.file out.file
     '''
 }
 
