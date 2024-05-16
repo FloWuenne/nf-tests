@@ -1,77 +1,42 @@
-process CHECK_AND_UNZIP {
-
-    input:
-      val  checksum
-      path "file.fastq.gz"
+process BIGFILE {
 
     output:
-      path "file.fastq", emit: fastq
-      path "stats.txt" , emit: stats
+      path "big.file"
 
-
-    script:
-    """
-    # Function to store execution time
-    tm() { { >&2 echo -n -e "\$1\t" ; TIMEFORMAT="%E"; time bash -c "\$2" ; } 2>> stats.txt ; }
-
-    # Read as fast as possible
-    tm read "cat file.fastq.gz > /dev/null"
-
-    # Read again as fast as possible
-    tm read2 "cat file.fastq.gz > /dev/null"
-
-    # Verify the file MD5 checksum
-    tm check "echo ${checksum} file.fastq.gz | md5sum --check --status"
-
-    # Uncompress the file
-    tm uncompress "gzip -d -c file.fastq.gz > file.fastq"
-
-    # Count reads
-    tm count "grep -c '^+\$' file.fastq" 
-    """
-}
-
-process ZIP_AND_COMPARE {
-
-    input:
-      path "file.fastq"
-      path "original.fastq.gz"
-
-    output:
-      path "stats.txt", emit: stats
 
     script:
     '''
-    # Function to store execution time
-    tm() { { >&2 echo -n -e "$1\t" ; TIMEFORMAT="%E"; time bash -c "$2" ; } 2>> stats.txt ; }
-
-    # Compress file
-    tm compress "gzip --fast -c file.fastq > file.fastq.gz"
-
-    # Compare with the original compressed file
-    tm compare "zcmp file.fastq.gz original.fastq.gz"
+    dd if=/dev/zero of=big.file bs=1G count=6
     '''
 }
 
-process REPORT {
-    debug true
-    publishDir "${params.outdir}"
+process MOVE {
 
     input:
-      path "check_and_unzip.txt"
-      path "zip_and_compare.txt"
+      path "in.file"
 
     output:
-      path "stats.txt"
+      path "out.file"
 
     script:
     '''
-    cat *.txt | tee stats.txt
+    mv in.file out.file
+    '''
+}
+
+process CHECK {
+
+    input:
+      path "big.file"
+
+    script:
+    '''
+    echo "58cf638a733f919007b4287cf5396d0c  big.file" | md5sum --check --quiet
     '''
 }
  
 workflow {
-    CHECK_AND_UNZIP(params.md5, params.infile)
-    ZIP_AND_COMPARE(CHECK_AND_UNZIP.out.fastq, params.infile)
-    REPORT(CHECK_AND_UNZIP.out.stats, ZIP_AND_COMPARE.out.stats)
+    BIGFILE()
+    MOVE(BIGFILE.out)
+    CHECK(MOVE.out)
 }
