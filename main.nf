@@ -24,7 +24,7 @@ process FORWARD {
 }
 
 process PUBLISH {
-    publishDir "s3://nextflow-ci/work/ci-test/fusion-symlink"
+    publishDir "s3://fusionfs/fusion-symlink"
 
     input:
     path "data.txt"
