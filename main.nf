@@ -1,7 +1,8 @@
 params.image = 'https://cloud.seqera.io/assets/seqera-brand.svg'
+params.outdir = 'results'
 
 process PUBLISH {
-    publishDir "results", mode: 'copy'
+    publishDir params.outdir, mode: 'copy'
 
     input:
     path "image.svg"
