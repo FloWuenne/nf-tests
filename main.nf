@@ -1,43 +1,22 @@
-process CREATE {
-
-    output:
-    path "data.txt"
-
-    script:
-    """
-    echo HELLO > data.txt
-    """
-}
-
-process FORWARD {
-
-    input:
-    path "data.txt"
-
-    output:
-    path "data.txt"
-
-    script:
-    """
-    echo AND
-    """
-}
+params.image = 'https://cloud.seqera.io/assets/seqera-brand.svg'
 
 process PUBLISH {
-    publishDir "s3://fusionfs/fusion-symlink"
+    publishDir "results", mode: 'copy'
 
     input:
-    path "data.txt"
+    path "image.svg"
 
     output:
-    path "data.txt"
+    path "output/*"
 
     script:
-    """
-    echo BYE
-    """
+    '''
+    mkdir output
+    cp image.svg output/image.svg
+    echo "<html><body><img src='image.svg' /><h1>HELLO WORLD</h1></body></html>" > output/output.html 
+    '''
 }
 
 workflow {
-    CREATE | FORWARD | PUBLISH
+    PUBLISH(params.image)
 }
