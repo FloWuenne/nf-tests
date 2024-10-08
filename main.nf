@@ -11,7 +11,7 @@ process DISKUSAGE {
 
     script:
     '''
-    FUSIONDIR=$(echo "$WORKDIR" | sed -e 's|s3:///|/fusion/s3/|' -e 's|az:///|/fusion/az/|' -e 's|gs:///|/fusion/gs/|')
+    FUSIONDIR=$(echo "$WORKDIR" | sed -e 's|s3:///|/fusion/s3/|' | sed -e 's|az:///|/fusion/az/|' -e 's|gs:///|/fusion/gs/|' | sed -e 's|s3://|/fusion/s3/|' -e 's|az://|/fusion/az/|' -e 's|gs://|/fusion/gs/|' )
     LOGFILE="$FUSIONDIR/nf-$WORKFLOWID.log"
     echo >> $LOGFILE
     echo "--- DISK USAGE START ---" >> $LOGFILE 
