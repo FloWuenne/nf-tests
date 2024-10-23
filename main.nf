@@ -1,13 +1,28 @@
 params.workdir = "${workDir.toUri()}"
 params.workflowid = "${params.workdir.tokenize('/').last()}"
+params.input_tsv = null  // Default to null
 
-printf "WorkDir: ${params.workdir} -- Workflow ID: ${params.workflowid}" 
+// Create a channel based on whether input_tsv is provided or not
+def input_channel
+
+if (params.input_tsv) {
+    // If input_tsv is provided, create a channel from the TSV file
+    input_channel = Channel
+        .fromPath(params.input_tsv)
+        .splitCsv(header: true, sep: '\t')
+        .map { row -> tuple(row.workdir, row.workflowid) }
+} else {
+    // If input_tsv is not provided, use the single workdir and workflowid
+    input_channel = Channel.of(tuple(params.workdir, params.workflowid))
+    
+    // Print the original message
+    println "WorkDir: ${params.workdir} -- Workflow ID: ${params.workflowid}"
+}
 
 process DISKUSAGE {
 
     input:
-    env WORKDIR
-    env WORKFLOWID
+    tuple env(WORKDIR), env(WORKFLOWID)
 
     script:
     '''
@@ -24,5 +39,5 @@ process DISKUSAGE {
 }
 
 workflow {
-    DISKUSAGE(params.workdir, params.workflowid)
+    DISKUSAGE(input_channel)
 }
